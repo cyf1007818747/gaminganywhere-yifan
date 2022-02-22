@@ -1,4 +1,5 @@
 #!/bin/sh
-export GADEPS=$HOME/myprog/gaminganywhere/deps.posix
+# export GADEPS=$HOME/myprog/gaminganywhere/deps.posix
+export GADEPS=/Users/bh/Documents/MyKingdom/ANU-Formal/2022-Internship/gaminganywhere-0.8.0/deps.posix
 export PKG_CONFIG_PATH=$GADEPS/lib/pkgconfig:/opt/local/lib/pkgconfig:/usr/lib/i386-linux-gnu/pkgconfig/:/usr/lib/pkgconfig
 export PATH=$GADEPS/bin:$PATH
