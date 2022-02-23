@@ -31,12 +31,12 @@ using namespace std;
 static pthread_mutex_t avcodec_open_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 struct SwsContext *
-ga_swscale_init(PixelFormat format, int inW, int inH, int outW, int outH) {
+ga_swscale_init(AVPixelFormat format, int inW, int inH, int outW, int outH) {
 	struct SwsContext *swsctx = NULL;
 	//
 	if((swsctx = sws_getContext(
 				inW, inH, format, //PIX_FMT_BGRA/*PIX_FMT_ARGB*/,
-				outW, outH, PIX_FMT_YUV420P,
+				outW, outH, AV_PIX_FMT_YUV420P,
 				SWS_BICUBIC, NULL, NULL, NULL)) == NULL) {
 		fprintf(stderr, "# ga-swscale-init: cannot create swscale context\n");
 	}
@@ -45,11 +45,22 @@ ga_swscale_init(PixelFormat format, int inW, int inH, int outW, int outH) {
 
 AVFormatContext*
 ga_format_init(const char *filename) {
+	/*
 	AVOutputFormat *fmt;
 	AVFormatContext *ctx;
 	//
 	if((fmt = av_guess_format(NULL, filename, NULL)) == NULL) {
 		if((fmt = av_guess_format("mkv", NULL, NULL)) == NULL) {
+			fprintf(stderr, "# cannot find suitable format.\n");
+			return NULL;
+		}
+	}
+	*/
+	const AVOutputFormat *fmt = av_guess_format(NULL, filename, NULL);
+	AVFormatContext *ctx;
+	if(fmt == NULL) {
+		const AVOutputFormat *fmt2 = av_guess_format("mkv", NULL, NULL);
+		if(fmt2 == NULL) {
 			fprintf(stderr, "# cannot find suitable format.\n");
 			return NULL;
 		}

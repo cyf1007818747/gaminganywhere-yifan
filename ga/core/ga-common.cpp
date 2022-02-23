@@ -323,8 +323,8 @@ ga_init(const char *config, const char *url) {
 	srand(time(0));
 	winsock_init();
 #ifndef ANDROID_NO_FFMPEG
-	av_register_all();
-	avcodec_register_all();
+	//av_register_all();
+	//avcodec_register_all();
 	avformat_network_init();
 	//ga_dump_codecs();
 #endif
