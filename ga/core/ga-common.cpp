@@ -288,12 +288,24 @@ ga_dump_codecs() {
 	n = snprintf(buf, sizeof(buf), "Registered codecs: ");
 	ptr = &buf[n];
 	count = 0;
+	/*
 	for(c = av_codec_next(NULL); c != NULL; c = av_codec_next(c)) {
 		n = snprintf(ptr, sizeof(buf)-(ptr-buf), "%s ",
 				c->name);
 		ptr += n;
 		count++;
-	}
+	} 
+	*/
+	void *iter = NULL;
+	for(;;) {
+		const AVCodec *c = av_codec_iterate(&iter);
+		if(!c)
+			break;
+		n = snprintf(ptr, sizeof(buf)-(ptr-buf), "%s ",
+				c->name);
+		ptr += n;
+		count++;
+	} 
 	snprintf(ptr, sizeof(buf)-(ptr-buf), "(%d)\n", count);
 	ga_error(buf);
 	return;
