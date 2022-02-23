@@ -136,12 +136,22 @@ ga_avformat_new_stream(AVFormatContext *ctx, int id, AVCodec *codec) {
 	return st;
 }
 
-AVCodec*
+const AVCodec*
 ga_avcodec_find_encoder(const char **names, enum AVCodecID cid) {
+	/* @yifan
 	AVCodec *codec = NULL;
 	if(names != NULL) {
 		while(*names != NULL) {
 			if((codec = avcodec_find_encoder_by_name(*names)) != NULL)
+				return codec;
+			names++;
+		}
+	}
+	*/
+	const AVCodec *codec = avcodec_find_encoder_by_name(*names);
+	if(names != NULL) {
+		while(*names != NULL) {
+			if(codec != NULL)
 				return codec;
 			names++;
 		}
@@ -151,12 +161,22 @@ ga_avcodec_find_encoder(const char **names, enum AVCodecID cid) {
 	return NULL;
 }
 
-AVCodec*
+const AVCodec*
 ga_avcodec_find_decoder(const char **names, enum AVCodecID cid) {
+	/* @yifan
 	AVCodec *codec = NULL;
 	if(names != NULL) {
 		while(*names != NULL) {
 			if((codec = avcodec_find_decoder_by_name(*names)) != NULL)
+				return codec;
+			names++;
+		}
+	}
+	*/
+	const AVCodec *codec = avcodec_find_decoder_by_name(*names);
+	if(names != NULL) {
+		while(*names != NULL) {
+			if(codec != NULL)
 				return codec;
 			names++;
 		}
