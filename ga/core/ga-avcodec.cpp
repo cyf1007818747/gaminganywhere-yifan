@@ -45,7 +45,7 @@ ga_swscale_init(AVPixelFormat format, int inW, int inH, int outW, int outH) {
 
 AVFormatContext*
 ga_format_init(const char *filename) {
-	/*
+	/* @yifan
 	AVOutputFormat *fmt;
 	AVFormatContext *ctx;
 	//
@@ -69,13 +69,12 @@ ga_format_init(const char *filename) {
 		fprintf(stderr, "# create avformat context failed.\n");
 		return NULL;
 	}
-	//
 	ctx->oformat = fmt;
-	snprintf(ctx->filename, sizeof(ctx->filename), "%s", filename);
-	//
+	//@yifan: changed all 'ctx->filename' to 'ctx->url'
+	snprintf(ctx->url, sizeof(ctx->url), "%s", filename);
 	if((fmt->flags & AVFMT_NOFILE) == 0) {
-		if(avio_open(&ctx->pb, ctx->filename, AVIO_FLAG_WRITE) < 0) {
-			fprintf(stderr, "# cannot create file '%s'\n", ctx->filename);
+		if(avio_open(&ctx->pb, ctx->url, AVIO_FLAG_WRITE) < 0) {
+			fprintf(stderr, "# cannot create file '%s'\n", ctx->url);
 			return NULL;
 		}
 	}
@@ -85,10 +84,17 @@ ga_format_init(const char *filename) {
 
 AVFormatContext*
 ga_rtp_init(const char *url) {
+	/* @yifan
 	AVOutputFormat *fmt;
 	AVFormatContext *ctx;
-	//
 	if((fmt = av_guess_format("rtp", NULL, NULL)) == NULL) {
+		fprintf(stderr, "# rtp is not supported.\n");
+		return NULL;
+	}
+	*/
+	const AVOutputFormat *fmt = av_guess_format("rtp", NULL, NULL);
+	AVFormatContext *ctx;
+	if(fmt == NULL) {
 		fprintf(stderr, "# rtp is not supported.\n");
 		return NULL;
 	}
@@ -98,11 +104,11 @@ ga_rtp_init(const char *url) {
 	}
 	//
 	ctx->oformat = fmt;
-	snprintf(ctx->filename, sizeof(ctx->filename), "%s", url);
-	//
+	//@yifan: changed all 'ctx->filename' to 'ctx->url'
+	snprintf(ctx->url, sizeof(ctx->url), "%s", url);
 	//if((fmt->flags & AVFMT_NOFILE) == 0) {
-		if(avio_open(&ctx->pb, ctx->filename, AVIO_FLAG_WRITE) < 0) {
-			fprintf(stderr, "# cannot create file '%s'\n", ctx->filename);
+		if(avio_open(&ctx->pb, ctx->url, AVIO_FLAG_WRITE) < 0) {
+			fprintf(stderr, "# cannot create file '%s'\n", ctx->url);
 			return NULL;
 		}
 	//}
