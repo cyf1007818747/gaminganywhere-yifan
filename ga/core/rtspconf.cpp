@@ -100,7 +100,7 @@ rtspconf_init(struct RTSPConf *conf) {
 
 static int
 rtspconf_load_codec(const char *key, const char *value,
-	const char **names, AVCodec **codec, AVCodec *(*finder)(const char **, enum AVCodecID)) {
+	const char **names, AVCodec **codec, const AVCodec *(*finder)(const char **, enum AVCodecID)) {
 	//
 	int idx = 0;
 	char buf[1024], *saveptr;
@@ -115,8 +115,14 @@ rtspconf_load_codec(const char *key, const char *value,
 		names[idx] = strdup(token);
 	} while(++idx<RTSPCONF_CODECNAME_SIZE && (token=strtok_r(NULL, DELIM, &saveptr))!=NULL);
 	names[idx] = NULL;
-	//
+	/* @yifan
 	if((*codec = finder(names, AV_CODEC_ID_NONE)) == NULL) {
+		ga_error("# RTSP[config]: no available %s codecs (%s).\n", key, value);
+		return -1;
+	}
+	*/
+	const AVCodec *codec2 = finder(names, AV_CODEC_ID_NONE);
+	if(codec2 == NULL) {
 		ga_error("# RTSP[config]: no available %s codecs (%s).\n", key, value);
 		return -1;
 	}
