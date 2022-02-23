@@ -125,14 +125,14 @@ ga_avformat_new_stream(AVFormatContext *ctx, int id, AVCodec *codec) {
 		return NULL;
 	// format specific index
 	st->id = id;
-	//
+	/* @yifan
 	if(ctx->flags & AVFMT_GLOBALHEADER) {
 		st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
 	}
 	// some codec will need GLOBAL_HEADER to generate ctx->extradata!
 	if(codec->id == CODEC_ID_H264 || codec->id == CODEC_ID_AAC) {
 		st->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
-	}
+	} */
 	return st;
 }
 
